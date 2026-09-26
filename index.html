@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study in Germany Vault</title>
+<meta name="description" content="Study in Germany Vault - personal university and financial document dashboard.">
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#718096;--border:#e7ebf2;--primary:#4f46e5;--primary2:#7c3aed;--success:#16a34a;--warning:#d97706;--danger:#dc2626;--shadow:0 10px 35px rgba(30,41,59,.07);--radius:18px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+button,input,select{font:inherit}button{cursor:pointer}
+.header{background:rgba(255,255,255,.92);backdrop-filter:blur(15px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.header-inner{max-width:1200px;margin:auto;padding:20px 22px;text-align:center}.brand{font-size:25px;font-weight:850;letter-spacing:-.6px}
+.brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.people{display:inline-flex;background:#eef2ff;border:1px solid #dfe3ff;padding:4px;border-radius:12px;margin-top:14px;gap:4px}
+.person{border:0;background:transparent;padding:9px 22px;border-radius:9px;font-weight:800;color:#64748b;font-size:12px}
+.person.active{background:#fff;color:var(--primary);box-shadow:0 3px 10px rgba(79,70,229,.12)}
+.current{margin-top:9px;font-size:12px;color:var(--muted)}.current strong{color:var(--primary)}
+.hero{max-width:1200px;margin:auto;padding:42px 22px 24px}.hero h1{font-size:clamp(30px,5vw,46px);letter-spacing:-1.5px;margin-bottom:8px}.hero p{color:var(--muted);max-width:680px}
+.hero-actions{margin-top:23px;display:flex;gap:10px;flex-wrap:wrap}.search{flex:1;min-width:240px;background:#fff;border:1px solid var(--border);border-radius:11px;padding:12px 14px;outline:0}.search:focus{border-color:var(--primary)}
+.stats{max-width:1200px;margin:0 auto 22px;padding:0 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.stat{background:#fff;border:1px solid var(--border);padding:17px;border-radius:16px;box-shadow:var(--shadow)}.stat-number{font-size:27px;font-weight:850}.stat-label{font-size:12px;color:var(--muted)}
+.main{max-width:1200px;margin:auto;padding:0 22px 60px}.category{margin-top:30px}.category-header{display:flex;align-items:center;margin-bottom:13px}.category-title{display:flex;align-items:center;gap:12px}.category-icon{width:44px;height:44px;border-radius:13px;background:#eef2ff;color:var(--primary);display:grid;place-items:center;font-size:21px}.category h2{font-size:21px}.category-subtitle{font-size:12px;color:var(--muted)}
+.documents{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.document{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);transition:.2s}.document:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(30,41,59,.1)}
+.document-top{display:flex;gap:13px}.file-icon{width:43px;height:43px;border-radius:12px;background:#f1f5f9;display:grid;place-items:center;flex-shrink:0}.document-info{flex:1;min-width:0}.document-name{font-weight:750;font-size:15px}.file-name{color:var(--muted);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status{display:inline-flex;margin-top:10px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800}.status.missing{background:#fff7ed;color:var(--warning)}.status.uploaded{background:#ecfdf5;color:var(--success)}
+.actions{border-top:1px solid var(--border);margin-top:15px;padding-top:12px;display:flex;gap:7px;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:750}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:#f1f5f9;color:#334155}.btn-danger{background:#fee2e2;color:var(--danger)}.btn:disabled{opacity:.42;cursor:not-allowed}
+.subsection{margin-top:14px;padding:16px;background:#f8fafc;border:1px solid var(--border);border-radius:15px}.subsection-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}.subsection-title{font-size:14px;font-weight:800}.subsection-label{font-size:11px;color:var(--muted)}.subsection-actions{margin-left:auto;display:flex;gap:7px}.subsection .documents{margin-top:8px}.subsection-add-doc{margin-top:10px}.category-add-sub{margin-left:auto;white-space:nowrap}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.modal-backdrop.show{display:flex}.modal{width:min(500px,100%);background:#fff;border-radius:20px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.2)}.modal h3{margin-bottom:18px}.form-group{margin-bottom:14px}.form-group label{display:block;font-size:12px;font-weight:750;margin-bottom:6px}.form-control{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;outline:0}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.toast{position:fixed;right:20px;bottom:20px;background:#172033;color:#fff;padding:12px 16px;border-radius:10px;font-size:13px;transform:translateY(100px);opacity:0;transition:.25s;z-index:200}.toast.show{transform:translateY(0);opacity:1}
+@media(max-width:700px){.stats{grid-template-columns:1fr}.documents{grid-template-columns:1fr}.hero{padding-top:32px}.main,.hero,.stats{padding-left:17px;padding-right:17px}.person{padding:9px 17px}}
+</style>
+</head>
+<body>
+<header class="header"><div class="header-inner">
+  <div class="brand">Study in Germany Vault</div>
+  <div class="brand-sub">Personal study & document management</div>
+  <div class="people"><button class="person active" data-person="PROTTAY">PROTTAY</button><button class="person" data-person="FATEMA">FATEMA</button></div>
+  <div class="current">Currently viewing: <strong id="currentPerson">PROTTAY</strong></div>
+</div></header>
+
+<section class="hero"><h1 id="welcome">PROTTAY's Documents</h1><p>Keep university admission, enrollment, visa and blocked-account documents organized in one place.</p>
+<div class="hero-actions"><input id="searchInput" class="search" type="search" placeholder="Search documents..."><button class="btn btn-primary" id="addBtn">+ Add Document</button></div></section>
+
+<section class="stats"><div class="stat"><div class="stat-number" id="totalDocuments">20</div><div class="stat-label">Total Documents</div></div><div class="stat"><div class="stat-number" id="uploadedDocuments">0</div><div class="stat-label">Uploaded</div></div><div class="stat"><div class="stat-number" id="missingDocuments">20</div><div class="stat-label">Missing</div></div></section>
+
+<main class="main" id="dashboard"></main>
+<div class="no-results" id="noResults">No documents found.</div>
+
+<div class="modal-backdrop" id="subsectionModal"><div class="modal">
+<h3>Add Subsection</h3>
+<div class="form-group"><label>Main Section</label><input class="form-control" id="subsectionParent" readonly></div>
+<div class="form-group"><label>Subsection Name</label><input class="form-control" id="subsectionName" placeholder="e.g. Health Insurance"></div>
+<div class="modal-actions"><button class="btn btn-secondary" id="cancelSubsection">Cancel</button><button class="btn btn-primary" id="saveSubsection">Create Subsection</button></div>
+</div></div>
+
+<div class="modal-backdrop" id="modal"><div class="modal">
+<h3>Modify Document</h3>
+<div class="form-group"><label>Document Name</label><input class="form-control" id="editName"></div>
+<div class="form-group"><label>Status</label><select class="form-control" id="editStatus"><option value="missing">Missing</option><option value="uploaded">Uploaded</option><option value="pending">Pending</option><option value="verified">Verified</option></select></div>
+<div class="modal-actions"><button class="btn btn-secondary" id="cancelModal">Cancel</button><button class="btn btn-danger" id="deleteDoc">Delete File</button><button class="btn btn-primary" id="saveModal">Save Changes</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PEOPLE=["PROTTAY","FATEMA"];
+const CATEGORIES=[
+ {name:"Hamm-Lippstadt University",icon:"🏫",sub:"University documents",docs:["Offer Letter","Enrollment Paper","Late Arrival Letter","Admission / Acceptance","Other Documents"]},
+ {name:"TU Chemnitz",icon:"🎓",sub:"University documents",docs:["Offer Letter","Enrollment Paper","Late Arrival Letter","Admission / Acceptance","Other Documents"]},
+ {name:"Fintiba",icon:"💳",sub:"Blocked account & financial documents",docs:["Account Details","Block Account Confirmation","Swift Copy","Transfer Copy","Other Documents"]},
+ {name:"Expatrio",icon:"💶",sub:"Blocked account & financial documents",docs:["Account Details","Block Account Confirmation","Swift Copy","Transfer Copy","Other Documents"]}
+];
+let person="PROTTAY", currentCard=null, db=null;
+const DB="StudyGermanyVault", STORE="documents";
+const req=indexedDB.open(DB,1);
+req.onupgradeneeded=e=>e.target.result.createObjectStore(STORE,{keyPath:"id"});
+req.onsuccess=e=>{db=e.target.result;render();};
+
+function key(cat,doc){return person+"::"+cat+"::"+doc}
+
+function subsectionKey(category){return "subsections::"+person+"::"+category}
+function loadSubsections(category,callback){
+ const r=db.transaction(STORE,"readonly").objectStore(STORE).get(subsectionKey(category));
+ r.onsuccess=()=>callback(r.result?.sections||[]);
+}
+function saveSubsections(category,sections,callback){
+ const tx=db.transaction(STORE,"readwrite");
+ tx.objectStore(STORE).put({id:subsectionKey(category),sections});
+ tx.oncomplete=callback;
+}
+function openSubsectionModal(category){
+ document.getElementById("subsectionParent").value=category;
+ document.getElementById("subsectionName").value="";
+ document.getElementById("subsectionModal").classList.add("show");
+ setTimeout(()=>document.getElementById("subsectionName").focus(),50);
+}
+function addSubsection(category,name){
+ loadSubsections(category,sections=>{
+   if(sections.some(s=>s.name.toLowerCase()===name.toLowerCase())) return toast("That subsection already exists");
+   sections.push({id:Date.now().toString(),name,docs:[]});
+   saveSubsections(category,sections,()=>{render();toast("Subsection created")});
+ });
+}
+function addSubsectionDoc(category,section){
+ const name=prompt("Document name (e.g. Health Insurance Certificate):");
+ if(!name?.trim())return;
+ loadSubsections(category,sections=>{
+   const s=sections.find(x=>x.id===section.id); if(!s)return;
+   if(s.docs.some(d=>d.toLowerCase()===name.trim().toLowerCase()))return toast("Document already exists");
+   s.docs.push(name.trim());
+   saveSubsections(category,sections,()=>{render();toast("Document added to subsection")});
+ });
+}
+function removeSubsection(category,section){
+ if(!confirm('Delete "'+section.name+'" and all its documents?'))return;
+ loadSubsections(category,sections=>{
+   const target=sections.find(s=>s.id===section.id); if(!target)return;
+   const tx=db.transaction(STORE,"readwrite"),store=tx.objectStore(STORE);
+   target.docs.forEach(d=>store.delete(person+"::SUB::"+category+"::"+section.id+"::"+d));
+   sections=sections.filter(s=>s.id!==section.id);
+   store.put({id:subsectionKey(category),sections});
+   tx.oncomplete=()=>{render();toast("Subsection deleted")};
+ });
+}
+
+async function getSubsections(category){
+ return new Promise(resolve=>loadSubsections(category,resolve));
+}
+
+async function render(){
+ const dash=document.getElementById("dashboard");dash.innerHTML="";
+ document.getElementById("welcome").textContent=person+"'s Documents";
+ document.getElementById("currentPerson").textContent=person;
+
+ for(const c of CATEGORIES){
+   const sec=document.createElement("section");sec.className="category";
+   sec.innerHTML=`<div class="category-header"><div class="category-title"><div class="category-icon">${c.icon}</div><div><h2>${c.name}</h2><div class="category-subtitle">${c.sub}</div></div></div><button class="btn btn-secondary category-add-sub">+ Add Subsection</button></div><div class="documents"></div><div class="subsections"></div>`;
+   const grid=sec.querySelector(".documents");
+   c.docs.forEach(d=>{
+   if(d==="Other Documents") grid.appendChild(makeOtherDocumentsCard(c.name));
+   else grid.appendChild(makeCard(c.name,d));
+ });
+   sec.querySelector(".category-add-sub").onclick=()=>openSubsectionModal(c.name);
+
+   const subs=await getSubsections(c.name);
+   const subWrap=sec.querySelector(".subsections");
+   subs.forEach(s=>{
+     const sub=document.createElement("div");sub.className="subsection";
+     sub.innerHTML=`<div class="subsection-header"><div><div class="subsection-title">📁 ${escapeHtml(s.name)}</div><div class="subsection-label">Custom subsection inside ${escapeHtml(c.name)}</div></div><div class="subsection-actions"><button class="btn btn-secondary subsection-add-doc">+ Add Document</button><button class="btn btn-danger subsection-remove">Delete</button></div></div><div class="documents"></div>`;
+     const sg=sub.querySelector(".documents");
+     s.docs.forEach(d=>sg.appendChild(makeCard("SUB::"+c.name+"::"+s.id,d)));
+     sub.querySelector(".subsection-add-doc").onclick=()=>addSubsectionDoc(c.name,s);
+     sub.querySelector(".subsection-remove").onclick=()=>removeSubsection(c.name,s);
+     subWrap.appendChild(sub);
+   });
+   dash.appendChild(sec);
+ }
+ updateStats();applySearch();
+}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+
+function makeOtherDocumentsCard(cat){
+ const card=document.createElement("div");card.className="document";card.dataset.name="Other Documents";card.dataset.cat=cat;card.dataset.doc="Other Documents";
+ card.innerHTML=`<div class="document-top"><div class="file-icon">📚</div><div class="document-info"><div class="document-name">Other Documents</div><div class="file-name">Upload multiple documents here</div><span class="status missing">No files</span></div></div><div class="multi-file-list"></div><button class="btn btn-primary multi-file-add">+ Add Document</button>`;
+ card.querySelector(".multi-file-add").onclick=()=>addOtherFile(card);
+ loadOtherFiles(card);
+ return card;
+}
+function otherKey(cat){return person+"::OTHERFILES::"+cat}
+function loadOtherFiles(card){
+ const r=db.transaction(STORE,"readonly").objectStore(STORE).get(otherKey(card.dataset.cat));
+ r.onsuccess=()=>renderOtherFiles(card,r.result?.files||[]);
+}
+function renderOtherFiles(card,files){
+ const list=card.querySelector(".multi-file-list");list.innerHTML="";
+ files.forEach((f,i)=>{
+   const row=document.createElement("div");row.className="multi-file-row";
+   row.innerHTML=`<span class="multi-file-name" title="${escapeHtml(f.name)}">📄 ${escapeHtml(f.name)}</span><button class="btn btn-secondary multi-download">Download</button><button class="btn btn-danger multi-delete">Delete</button>`;
+   row.querySelector(".multi-download").onclick=()=>{const url=URL.createObjectURL(f.data);const a=document.createElement("a");a.href=url;a.download=f.name;a.click();URL.revokeObjectURL(url);toast("Download started")};
+   row.querySelector(".multi-delete").onclick=()=>{if(!confirm("Delete this document?"))return;files.splice(i,1);saveOtherFiles(card,files)};
+   list.appendChild(row);
+ });
+ const status=card.querySelector(".status");
+ status.textContent=files.length ? `${files.length} file${files.length===1?"":"s"} uploaded` : "No files";
+ status.className="status "+(files.length?"uploaded":"missing");
+ card.querySelector(".file-name").textContent=files.length ? `${files.length} document${files.length===1?"":"s"} stored` : "Upload multiple documents here";
+}
+function saveOtherFiles(card,files){
+ const tx=db.transaction(STORE,"readwrite");
+ tx.objectStore(STORE).put({id:otherKey(card.dataset.cat),files});
+ tx.oncomplete=()=>{renderOtherFiles(card,files);updateStats();toast("Other Documents updated")};
+}
+function addOtherFile(card){
+ const input=document.createElement("input");input.type="file";input.multiple=true;
+ input.onchange=()=>{
+   const selected=[...input.files]; if(!selected.length)return;
+   const r=db.transaction(STORE,"readonly").objectStore(STORE).get(otherKey(card.dataset.cat));
+   r.onsuccess=()=>{
+     const files=r.result?.files||[];
+     selected.forEach(f=>files.push({name:f.name,type:f.type,data:f}));
+     saveOtherFiles(card,files);
+   };
+ };
+ input.click();
+}
+
+function makeCard(cat,doc){
+ const card=document.createElement("div");card.className="document";card.dataset.name=doc;
+ card.innerHTML=`<div class="document-top"><div class="file-icon">📄</div><div class="document-info"><div class="document-name">${doc}</div><div class="file-name">No file uploaded</div><span class="status missing">Missing</span></div></div><div class="actions"><button class="btn btn-primary upload-btn">Upload</button><button class="btn btn-secondary download-btn" disabled>Download</button><button class="btn btn-secondary modify-btn">Modify</button></div><input type="file" hidden>`;
+ card.dataset.cat=cat;card.dataset.doc=doc;
+ const input=card.querySelector("input");
+ card.querySelector(".upload-btn").onclick=()=>{input.click()};
+ input.onchange=()=>{if(input.files[0])saveFile(card,input.files[0])};
+ card.querySelector(".download-btn").onclick=()=>downloadFile(card);
+ card.querySelector(".modify-btn").onclick=()=>openModify(card);
+ const r=db.transaction(STORE,"readonly").objectStore(STORE).get(key(cat,doc));
+ r.onsuccess=()=>{if(r.result){updateCard(card,r.result.name,true,r.result.status||"uploaded")};updateStats()};
+ return card;
+}
+function saveFile(card,file){
+ const id=key(card.dataset.cat,card.dataset.doc);
+ const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).put({id,name:file.name,type:file.type,data:file,status:"uploaded"});
+ tx.oncomplete=()=>{updateCard(card,file.name,true,"uploaded");updateStats();toast("Document uploaded successfully")};
+}
+function updateCard(card,name,uploaded,status="uploaded"){
+ card.querySelector(".file-name").textContent=uploaded?name:"No file uploaded";
+ const s=card.querySelector(".status");s.textContent=status[0].toUpperCase()+status.slice(1);s.className="status "+(uploaded?"uploaded":"missing");
+ card.querySelector(".download-btn").disabled=!uploaded;
+}
+function downloadFile(card){
+ const r=db.transaction(STORE,"readonly").objectStore(STORE).get(key(card.dataset.cat,card.dataset.doc));
+ r.onsuccess=()=>{if(!r.result){toast("No file uploaded yet");return}const url=URL.createObjectURL(r.result.data),a=document.createElement("a");a.href=url;a.download=r.result.name;a.click();URL.revokeObjectURL(url);toast("Download started")};
+}
+function openModify(card){
+ currentCard=card;
+ document.getElementById("editName").value=card.querySelector(".document-name").textContent;
+ document.getElementById("editStatus").value=card.querySelector(".status").textContent.toLowerCase();
+ document.getElementById("modal").classList.add("show");
+}
+function closeModal(){document.getElementById("modal").classList.remove("show");currentCard=null}
+document.getElementById("cancelModal").onclick=closeModal;
+document.getElementById("saveModal").onclick=()=>{
+ if(!currentCard)return;
+ const name=document.getElementById("editName").value.trim();if(!name)return toast("Enter a document name");
+ const status=document.getElementById("editStatus").value;
+ currentCard.querySelector(".document-name").textContent=name;
+ const r=db.transaction(STORE,"readonly").objectStore(STORE).get(key(currentCard.dataset.cat,currentCard.dataset.doc));
+ r.onsuccess=()=>{if(r.result){r.result.status=status;const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).put(r.result)}};
+ const uploaded=currentCard.querySelector(".download-btn").disabled===false;
+ const s=currentCard.querySelector(".status");s.textContent=status[0].toUpperCase()+status.slice(1);s.className="status "+(uploaded?"uploaded":"missing");
+ closeModal();toast("Document modified");
+};
+document.getElementById("deleteDoc").onclick=()=>{
+ if(!currentCard)return;
+ if(!confirm("Delete this uploaded file?"))return;
+ db.transaction(STORE,"readwrite").objectStore(STORE).delete(key(currentCard.dataset.cat,currentCard.dataset.doc));
+ updateCard(currentCard,"No file uploaded",false,"missing");updateStats();closeModal();toast("File deleted");
+};
+document.querySelectorAll(".person").forEach(b=>b.onclick=()=>{person=b.dataset.person;document.querySelectorAll(".person").forEach(x=>x.classList.toggle("active",x===b));document.getElementById("searchInput").value="";render()});
+document.getElementById("searchInput").oninput=applySearch;
+function applySearch(){const q=document.getElementById("searchInput").value.toLowerCase().trim();let n=0;document.querySelectorAll(".document").forEach(c=>{const ok=c.textContent.toLowerCase().includes(q);c.style.display=ok?"":"none";if(ok)n++});document.getElementById("noResults").style.display=n?"none":"block"}
+function updateStats(){
+ const cards=[...document.querySelectorAll(".document")];
+ let total=0,up=0;
+ cards.forEach(c=>{
+   total++;
+   const s=c.querySelector(".status");
+   if(s.classList.contains("uploaded")) up++;
+ });
+ document.getElementById("totalDocuments").textContent=total;
+ document.getElementById("uploadedDocuments").textContent=up;
+ document.getElementById("missingDocuments").textContent=total-up;
+}
+document.getElementById("addBtn").onclick=()=>toast("Use + Add Subsection inside a main section, or Upload on a document card.");
+document.getElementById("cancelSubsection").onclick=()=>document.getElementById("subsectionModal").classList.remove("show");
+document.getElementById("saveSubsection").onclick=()=>{
+ const parent=document.getElementById("subsectionParent").value;
+ const n=document.getElementById("subsectionName").value.trim();
+ if(!n)return toast("Enter a subsection name");
+ document.getElementById("subsectionModal").classList.remove("show");
+ addSubsection(parent,n);
+};
+document.getElementById("subsectionModal").addEventListener("click",e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove("show")});
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)}
+</script>
+</body>
+</html>
